@@ -21,5 +21,39 @@ export class ShowInspectionComponent implements OnInit {
     this.inspectionList$ = this.service.getInspectionList();
 
     this.inspectionTypesList$ = this.service.getInspectionTypesList();
+
+    this.refreshInspectionTypesMap();
+  }
+
+  // variables (properties)
+  modalTitle: string = "";
+  activateAddEditInspectionComponent: boolean = false;
+  inspection: any;
+
+  modalAdd() {
+    this.inspection = {
+      id: 0,
+      sttaus: null,
+      comments: null,
+      inspectionId: null,
+    };
+    this.modalTitle = "Add Inspection";
+    this.activateAddEditInspectionComponent = true;
+  }
+
+  modalClose() {
+    this.activateAddEditInspectionComponent = false;
+    this.inspectionList$ = this.service.getInspectionList();
+  }
+  refreshInspectionTypesMap() {
+    this.service.getInspectionTypesList().subscribe((data) => {
+      this.inspectionTypesList = data;
+      for (let i = 0; i < data.length; i++) {
+        this.inspectionTypesMap.set(
+          this.inspectionTypesList[i].id,
+          this.inspectionTypesList[i].inspectionName
+        );
+      }
+    });
   }
 }
